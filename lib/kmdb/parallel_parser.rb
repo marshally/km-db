@@ -3,7 +3,7 @@ require 'parallel'
 
 module KMDB
   class ParallelParser < Parser
-    
+
     def initialize(options = {})
       super(options)
       @worker_count = options.delete(:workers) || Parallel.processor_count

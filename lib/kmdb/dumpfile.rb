@@ -1,8 +1,9 @@
 require 'kmdb/custom_record'
 
 module KMDB
-  class Dumpfile < CustomRecord
-    set_table_name "dumpfiles"
+  class Dumpfile < ActiveRecord::Base
+    include CustomRecord
+    self.table_name = "dumpfiles"
 
     validates_presence_of :offset
     validates_presence_of :path
@@ -16,8 +17,10 @@ module KMDB
     end
 
     def self.get(pathname, job = nil)
+      self.table_name = "dumpfiles"
       job ||= 'nil'
-      find_or_create(:path => pathname.cleanpath.to_s, :job => job)
+
+      KMDB::Dumpfile.find_or_create_by_path_and_job(pathname.cleanpath.to_s, job)
     end
   end
 end

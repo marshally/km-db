@@ -7,13 +7,14 @@
 require 'kmdb/custom_record'
 
 module KMDB
-  class Key < CustomRecord
-    set_table_name "keys"
+  class Key < ActiveRecord::Base
+    include CustomRecord
+    self.table_name = "keys"
 
     has_many :events,     :foreign_key => :n,   :class_name => 'KMDB::Event',    :dependent => :delete_all
     has_many :properties, :foreign_key => :key, :class_name => 'KMDB::Property', :dependent => :delete_all
 
-    named_scope :has_duplicate, lambda {
+    scope :has_duplicate, lambda {
       {
         :select => "id, string, COUNT(id) AS quantity",
         :group => :string, :having => "quantity > 1"
@@ -50,7 +51,7 @@ module KMDB
 
     def self.get_uncached(string)
       string.size <= MaxStringSize or raise "String is too long"
-      find_or_create(:string => string).id
+      find_or_create_by_string(string).id
     end
   end
 end

@@ -1,5 +1,5 @@
 =begin
-  
+
   Setup a custom database for KissMetrics tracking events.
 
 =end
@@ -8,9 +8,9 @@ require 'active_record'
 
 module KMDB
   class SetupEventsDatabase < ActiveRecord::Migration
-    def self.connection
-      CustomRecord.connection
-    end
+    # def self.connection
+    #   CustomRecord.connection
+    # end
 
     def self.up
       create_table :events do |t|
@@ -31,7 +31,7 @@ module KMDB
         t.integer  :user_id
         t.integer  :event_id
         t.integer  :key
-        t.string   :value,   :limit => 64
+        t.string   :value,   :limit => 1024
         t.datetime :t
       end
       add_index :properties, [:key]

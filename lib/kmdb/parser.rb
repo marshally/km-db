@@ -8,7 +8,7 @@ module KMDB
     class ProgressBar < ::ProgressBar
       attr_writer :title
     end
-    
+
     attr :resume_job
     attr :verbose
     attr :abort_on_error
@@ -49,11 +49,11 @@ module KMDB
       log "total bytes : #{total_bytes}"
       total_bytes -= inputs.map { |p| Dumpfile.get(p, @resume_job) }.compact.map(&:offset).sum
       log "left to process : #{total_bytes}"
-      
+
       @processed_bytes = 0
       @progress = ProgressBar.new("-" * 20, total_bytes)
       @progress.long_running if @progress.respond_to?(:long_running)
-      
+
       inputs.sort.each do |input|
         process_events_in_file(input)
       end
@@ -71,10 +71,10 @@ module KMDB
       return if @exclude_regexps.any? { |re| text =~ re }
       return unless @include_regexps.all? { |re| text =~ re }
 
-      # filter strange utf-8 encoding/escaping found in KM dumps   
+      # filter strange utf-8 encoding/escaping found in KM dumps
       if text =~ /\\30[3-5]\\[0-9]{3}/
         begin
-          text = eval("%Q(#{text})") 
+          text = eval("%Q(#{text})")
         rescue SyntaxError => e
           log "Syntax error in: #{text}"
           raise e if @abort_on_error

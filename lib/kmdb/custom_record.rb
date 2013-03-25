@@ -14,7 +14,7 @@ require 'kmdb/migration'
 
 
 module KMDB
-  class CustomRecord < ActiveRecord::Base
+  module CustomRecord
     DefaultConfig = {
       'adapter'  => 'sqlite3',
       'database' => "test.db"
@@ -32,10 +32,6 @@ module KMDB
       }
     end
 
-    def self.find_or_create(options)
-      find(:first, :conditions => options) || create(options)
-    end
-
     def self.connect_to_km_db!
       config = DefaultConfig.dup
       ['km_db.yml', 'config/km_db.yml'].each do |config_path|
@@ -43,11 +39,12 @@ module KMDB
         config.merge! YAML.load(ERB.new(File.open(config_path).read).result)
         break
       end
-      establish_connection(config)
 
-      unless connection.table_exists?('events')
+      ActiveRecord::Base.establish_connection(config)
+
+      unless ActiveRecord::Base.connection.table_exists?('events')
         SetupEventsDatabase.up
-        self.reset_column_information
+        # reset_column_information
       end
     end
   end
