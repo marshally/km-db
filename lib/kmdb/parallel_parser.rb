@@ -24,6 +24,7 @@ module KMDB
         @pipe_rd.close
         Parallel.each(inputs, :in_processes => @worker_count) do |input|
           KMDB::Event.connection.reconnect!
+          KMDB::User.connection.reconnect!
           log "Worker #{Process.pid} starting #{input}"
           $0 = "worker: #{input}"
           process_events_in_file(input)

@@ -2,7 +2,7 @@ require 'yajl/json_gem'
 require 'pathname'
 require 'progressbar'
 require 'pstore'
-
+require 'active_record'
 module KMDB
   class Parser
     class ProgressBar < ::ProgressBar
