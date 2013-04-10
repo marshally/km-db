@@ -30,7 +30,7 @@ module KMDB
       [Property,Event].each do |model|
         model.user_is(self).update_all({:user_id => other.id})
       end
-      self.update_attributes!(:alias => other)
+      self.update_attributes(:alias => other)
     end
 
     # return the user named `name` (creating it if necessary)
