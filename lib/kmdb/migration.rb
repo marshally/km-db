@@ -31,7 +31,7 @@ module KMDB
         t.integer  :user_id
         t.integer  :event_id
         t.integer  :key
-        t.string   :value,   :limit => 1024
+        t.string   :value,   :limit => 2048
         t.datetime :t
       end
       add_index :properties, [:key]
