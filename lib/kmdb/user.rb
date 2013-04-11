@@ -37,7 +37,14 @@ module KMDB
     # if `name` is an alias, return the original user
     def self.get(name)
       user = named(name).first || create(:name => name)
-      user = user.alias while user.alias
+      infinite_loop_protection = [name]
+      while user.alias do
+        if infinite_loop_protection.include? user.alias.name
+          raise UserError.new "infinite alias loop #{user.name} #{user.alias.name}"
+        end
+        user = user.alias
+      end
+
       return user
     end
 
@@ -75,6 +82,16 @@ module KMDB
       find(:all, :joins => :alias, :conditions => 'aliases_users.alias_id IS NOT NULL').each do |user|
         user = find(user.id)
         origin = find(user.alias_id)
+
+        infinite_loop_protection = [origin.name]
+        while origin.alias do
+          if infinite_loop_protection.include? origin.alias.name
+            raise UserError.new "infinite alias loop #{origin.name} #{user.alias.name}"
+          end
+          origin = origin.alias
+        end
+
+
         origin = origin.alias while origin.alias # go up the chain
         $stderr.write "Aliasing #{user.name} -> #{origin.name}\n"
         user.aliases!(origin)
