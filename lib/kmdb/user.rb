@@ -86,7 +86,7 @@ module KMDB
         infinite_loop_protection = [origin.name]
         while origin.alias do
           if infinite_loop_protection.include? origin.alias.name
-            raise UserError.new "infinite alias loop #{origin.name} #{user.alias.name}"
+            raise UserError.new "infinite alias loop #{origin.id}:#{origin.name}-> #{origin.alias.id}:#{origin.alias.name}->#{origin.alias.alias.id}"
           end
           origin = origin.alias
         end
