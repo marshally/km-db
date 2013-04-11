@@ -40,6 +40,7 @@ module KMDB
       infinite_loop_protection = [name]
       while user.alias do
         if infinite_loop_protection.include? user.alias.name
+          [user, user.alias].sample.update_attributes(:alias_id => nil)
           raise UserError.new "infinite alias loop #{user.name} #{user.alias.name}"
         end
         user = user.alias
@@ -86,6 +87,7 @@ module KMDB
         infinite_loop_protection = [origin.name]
         while origin.alias do
           if infinite_loop_protection.include? origin.alias.name
+            [origin, origin.alias].sample.update_attributes(:alias_id => nil)
             raise UserError.new "infinite alias loop #{origin.id}:#{origin.name}-> #{origin.alias.id}:#{origin.alias.name}->#{origin.alias.alias.id}"
           end
           origin = origin.alias
