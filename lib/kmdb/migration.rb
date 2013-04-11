@@ -39,10 +39,10 @@ module KMDB
       add_index :properties, [:event_id]
 
       create_table :users do |t|
-        t.string  :name, :limit => 255
+        t.string  :name, :limit => 2048
         t.integer :alias_id
       end
-      add_index :users, [:name]
+      add_index :users, [:name], :limit => 255
 
       create_table :dumpfiles do |t|
         t.string  :path
