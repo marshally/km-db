@@ -91,8 +91,6 @@ module KMDB
           origin = origin.alias
         end
 
-
-        origin = origin.alias while origin.alias # go up the chain
         $stderr.write "Aliasing #{user.name} -> #{origin.name}\n"
         user.aliases!(origin)
       end
