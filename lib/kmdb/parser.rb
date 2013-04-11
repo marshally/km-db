@@ -1,4 +1,5 @@
-require 'yajl/json_gem'
+require 'oj'
+require 'multi_json'
 require 'pathname'
 require 'progressbar'
 require 'pstore'
