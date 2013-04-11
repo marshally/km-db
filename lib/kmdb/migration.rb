@@ -42,7 +42,7 @@ module KMDB
         t.string  :name, :limit => 2048
         t.integer :alias_id
       end
-      add_index :users, [:name], :limit => 255
+      add_index :users, [:name], :length => 255
 
       create_table :dumpfiles do |t|
         t.string  :path
