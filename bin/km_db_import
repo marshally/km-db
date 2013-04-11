@@ -8,7 +8,7 @@
 require 'rubygems'
 require 'kmdb'
 
-if KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
+if ENV['THREADED']!='single' && KMDB::Event.connection.class.to_s =~ /(mysql|pgsql)/i
   parser_class = KMDB::ParallelParser
 else
   parser_class = KMDB::Parser
